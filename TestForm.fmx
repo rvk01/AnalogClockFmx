@@ -3,9 +3,20 @@ object Form8: TForm8
   Top = 0
   Caption = 'Form8'
   ClientHeight = 368
-  ClientWidth = 640
+  ClientWidth = 520
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
   DesignerMasterStyle = 0
+  object AnalogClock1: TAnalogClock
+    Fill.Color = claChartreuse
+    Position.X = 296.000000000000000000
+    Position.Y = 16.000000000000000000
+    Size.Width = 168.000000000000000000
+    Size.Height = 129.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Thickness = 5.000000000000000000
+    Stroke.Dash = DashDot
+  end
 end

@@ -7,4 +7,4 @@ https://www.youtube.com/watch?v=QL5SdJAiWGE
 http://www.devpage.de/AnalogClock.zip
 
 
-![Example](http://i.imgur.com/dHu2gc9.png)
+![Example](http://i.imgur.com/Ic0DsAq.png)
