@@ -43,7 +43,7 @@ begin
   Size.Width := 200;
   Size.Height := 200;
   Size.PlatformDefault := False;
-  Stroke.Thickness := 0;
+  Stroke.Thickness := 1;
 
   rrHour := TRoundRect.Create(Self);
   rrHour.Parent := Self;
@@ -109,15 +109,15 @@ begin
   rrSec.Size.Width := 5;
 
   rrHour.Size.Height := trunc(Self.Size.Height / 2 * 0.5);
-  rrHour.Position.X := Self.Size.Width / 2;
+  rrHour.Position.X := (Self.Size.Width / 2) - (rrHour.Size.Width / 2);
   rrHour.Position.Y := (Self.Size.Height / 2) - rrHour.Size.Height;
 
   rrMin.Size.Height := trunc(Self.Size.Height / 2 * 0.8);
-  rrMin.Position.X := Self.Size.Width / 2;
+  rrMin.Position.X := (Self.Size.Width / 2) - (rrMin.Size.Width / 2);
   rrMin.Position.Y := (Self.Size.Height / 2) - rrMin.Size.Height;
 
   rrSec.Size.Height := trunc(Self.Size.Height / 2 * 0.8);
-  rrSec.Position.X := Self.Size.Width / 2;
+  rrSec.Position.X := (Self.Size.Width / 2) - (rrSec.Size.Width / 2);
   rrSec.Position.Y := (Self.Size.Height / 2) - rrSec.Size.Height;
 
   for I := 0 to Self.ComponentCount - 1 do
@@ -129,7 +129,8 @@ begin
         TLayout(Self.Components[I]).Size.Height := Self.Size.Height;
         if TLayout(Self.Components[I]).Components[J] is TText then
         begin
-          TText(TLayout(Self.Components[I]).Components[J]).Font.Size := Self.Size.Height / 8;
+          TText(TLayout(Self.Components[I]).Components[J]).Font.Size :=
+            Self.Size.Height / 8;
         end;
       end;
     end;
