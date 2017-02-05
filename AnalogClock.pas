@@ -12,6 +12,7 @@ type
     rrHour: TRoundRect;
     rrMin: TRoundRect;
     rrSec: TRoundRect;
+    procedure UpdatePositionSize;
     procedure UpdateClock(Sender: TObject);
   protected
     { Protected declarations }
@@ -48,33 +49,21 @@ begin
   rrHour.Parent := Self;
   rrHour.Stored := False;
   rrHour.Fill.Color := claBlack;
-  rrHour.Size.Height := trunc(Self.Size.Height / 2 * 0.5);
-  rrHour.Position.X := Self.Size.Width / 2;
-  rrHour.Position.Y := (Self.Size.Height / 2) - rrHour.Size.Height;
   rrHour.RotationCenter.Y := 1;
-  rrHour.Size.Width := Self.Size.Height / 15;
   rrHour.Size.PlatformDefault := False;
 
   rrMin := TRoundRect.Create(Self);
   rrMin.Parent := Self;
   rrMin.Stored := False;
   rrMin.Fill.Color := claBlack;
-  rrMin.Size.Height := trunc(Self.Size.Height / 2 * 0.8);
-  rrMin.Position.X := Self.Size.Width / 2;
-  rrMin.Position.Y := (Self.Size.Height / 2) - rrMin.Size.Height;
   rrMin.RotationCenter.Y := 1;
-  rrMin.Size.Width := Self.Size.Height / 15;
   rrMin.Size.PlatformDefault := False;
 
   rrSec := TRoundRect.Create(Self);
   rrSec.Parent := Self;
   rrSec.Stored := False;
   rrSec.Fill.Color := claCrimson;
-  rrSec.Size.Height := trunc(Self.Size.Height / 2 * 0.8);
-  rrSec.Position.X := Self.Size.Width / 2;
-  rrSec.Position.Y := (Self.Size.Height / 2) - rrSec.Size.Height;
   rrSec.RotationCenter.Y := 1;
-  rrSec.Size.Width := Self.Size.Height / 25;
   rrSec.Size.PlatformDefault := False;
 
   for I := 1 to 12 do
@@ -100,6 +89,8 @@ begin
     end;
   end;
 
+  UpdatePositionSize;
+
   with TTimer.Create(Self) do
   begin
     Interval := 1000;
@@ -109,48 +100,48 @@ begin
 
 end;
 
-procedure TAnalogClock.Resize;
+procedure TAnalogClock.UpdatePositionSize;
 var
   I, J: Integer;
 begin
-  inherited Resize;
+  rrHour.Size.Width := 8;
+  rrMin.Size.Width := 8;
+  rrSec.Size.Width := 5;
 
-  if Assigned(rrHour) then
+  rrHour.Size.Height := trunc(Self.Size.Height / 2 * 0.5);
+  rrHour.Position.X := Self.Size.Width / 2;
+  rrHour.Position.Y := (Self.Size.Height / 2) - rrHour.Size.Height;
+
+  rrMin.Size.Height := trunc(Self.Size.Height / 2 * 0.8);
+  rrMin.Position.X := Self.Size.Width / 2;
+  rrMin.Position.Y := (Self.Size.Height / 2) - rrMin.Size.Height;
+
+  rrSec.Size.Height := trunc(Self.Size.Height / 2 * 0.8);
+  rrSec.Position.X := Self.Size.Width / 2;
+  rrSec.Position.Y := (Self.Size.Height / 2) - rrSec.Size.Height;
+
+  for I := 0 to Self.ComponentCount - 1 do
   begin
-    rrHour.Size.Width := Self.Size.Height / 15;
-    rrMin.Size.Width := Self.Size.Height / 15;
-    rrSec.Size.Width := Self.Size.Height / 25;
-
-    rrHour.Size.Height := trunc(Self.Size.Height / 2 * 0.5);
-    rrHour.Position.X := Self.Size.Width / 2;
-    rrHour.Position.Y := (Self.Size.Height / 2) - rrHour.Size.Height;
-
-    rrMin.Size.Height := trunc(Self.Size.Height / 2 * 0.8);
-    rrMin.Position.X := Self.Size.Width / 2;
-    rrMin.Position.Y := (Self.Size.Height / 2) - rrMin.Size.Height;
-
-    rrSec.Size.Height := trunc(Self.Size.Height / 2 * 0.8);
-    rrSec.Position.X := Self.Size.Width / 2;
-    rrSec.Position.Y := (Self.Size.Height / 2) - rrSec.Size.Height;
-
-    for I := 0 to Self.ComponentCount - 1 do
+    if Self.Components[I] is TLayout then
     begin
-      if Self.Components[I] is TLayout then
+      for J := 0 to TLayout(Self.Components[I]).ComponentCount - 1 do
       begin
-        for J := 0 to TLayout(Self.Components[I]).ComponentCount - 1 do
+        TLayout(Self.Components[I]).Size.Height := Self.Size.Height;
+        if TLayout(Self.Components[I]).Components[J] is TText then
         begin
-         TLayout(Self.Components[I]).Size.Height := Self.Size.Height;
-         if TLayout(Self.Components[I]).Components[J] is TText then
-         begin
-           TText(TLayout(Self.Components[I]).Components[J]).Font.Size := Self.Size.Height / 8;
-         end;
+          TText(TLayout(Self.Components[I]).Components[J]).Font.Size := Self.Size.Height / 8;
         end;
       end;
-
     end;
-
   end;
 
+end;
+
+procedure TAnalogClock.Resize;
+begin
+  inherited Resize;
+  if Assigned(rrHour) then
+    UpdatePositionSize;
 end;
 
 procedure TAnalogClock.UpdateClock(Sender: TObject);
